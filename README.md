@@ -1,0 +1,9 @@
+Health Core - Professional Internship PortalHealth Core he ek modern Web Application aahe jya madhe user profile management, mental health assessments (Depression Test), ani secure authentication features aahet. He project ek Live Internship Project mhanun develop kele aahe.✨ Key FeaturesUser Dashboard: Personal information ani profile management sathi ek clean UI.Security: JWT-based authentication ani secure password hashing.Forget Password Flow:User-friendly "Forgot Password" link.Email Integration: Django/Node.js backend dware user cha email var OTP/Reset Link pathavli jate.Secure password reset process.Depression Test: Mental health assessment sathi ek specialized module.Interactive Marksheet: User cha test results la graphical format madhe display karne.🛠 Tech StackFrontend: React.js, React Router, CSS-in-JS (Inline Styles & Animations)Backend: Django REST Framework (Python) / Node.jsDatabase: PostgreSQL / SQLiteAPI: RESTful Architecture🔑 Forget Password Workflow (Logic)He system kashi kaam karte yacha flow khali dila aahe:Request: User tyancha registered email address enter karto.Validation: System backend madhe check karte ki email exist aahe ki nahi.Communication: Jar email valid asel, tar Backend dware ek Secure Token kiwa OTP user cha email var pathavla jato.Verification: User to OTP enter karto ani system verify karte.Reset: Verification nantar user la "New Password" set karnyacha access milto.🚀 Installation & SetupRepo Clone kara:Bashgit clone https://github.com/your-username/your-project-name.git
+Frontend setup:Bashcd frontend
+npm install
+npm start
+Backend setup:Bashcd backend
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+📸 ScreenshotsDashboardEdit ProfileForget Password👨‍💻 AuthorTumche NaavInternship at: [Company Name]LinkedIn: [Tumchi Link]
