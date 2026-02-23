@@ -112,3 +112,37 @@ class NoteSerializer(serializers.ModelSerializer):
         # या दोन ओळी Class Meta च्या आत आहेत, म्हणून तिथे अजून जास्त स्पेस असावी
         model = Note
         fields = ['id', 'user', 'title', 'content', 'tag', 'created_at']
+
+
+# serializers.py मध्ये खालीलप्रमाणे ॲड करा
+
+class UserSettingUpdateSerializer(serializers.Serializer):
+    # Counsellor Fields
+    fullName = serializers.CharField(source='counsellor.name', required=False)
+    specialization = serializers.CharField(source='counsellor.specialization', required=False)
+    phone = serializers.CharField(source='counsellor.phone', required=False, allow_blank=True)
+
+    # UserSetting Fields
+    language = serializers.CharField(required=False)
+    theme = serializers.CharField(required=False)
+    timezone = serializers.CharField(required=False)
+    dateFormat = serializers.CharField(source='date_format', required=False)
+
+    def update(self, instance, validated_data):
+        # १. Counsellor डेटा अपडेट करा
+        counsellor_data = validated_data.get('counsellor', {})
+        counsellor = instance.counsellor
+        if counsellor_data:
+            counsellor.name = counsellor_data.get('name', counsellor.name)
+            counsellor.specialization = counsellor_data.get('specialization', counsellor.specialization)
+            counsellor.phone = counsellor_data.get('phone', counsellor.phone)
+            counsellor.save()
+
+        # २. UserSetting डेटा अपडेट करा
+        instance.language = validated_data.get('language', instance.language)
+        instance.theme = validated_data.get('theme', instance.theme)
+        instance.timezone = validated_data.get('timezone', instance.timezone)
+        instance.date_format = validated_data.get('date_format', instance.date_format)
+        instance.save()
+
+        return instance

@@ -19,7 +19,11 @@ from .views import (
     DashboardSummaryView,
     CounsellorViewSet,
     ClientViewSet,
-    NoteViewSet
+    NoteViewSet,
+    AdminClientInfoListView,
+    AdminUserListView,
+    CounsellorSignupView,
+    UserSettingView,
 )
 
 # १. ViewSet साठी Router सेटअप करा
@@ -52,8 +56,12 @@ urlpatterns = [
     path('admin-login/', AdminLoginView.as_view(), name='admin_login'),
     path("profile/<int:user_id>/", ProfileView.as_view(), name='profile'),
     path("change-password/<int:user_id>/", ChangePasswordView.as_view(), name='change_password'),
-
+    path('admin-users/', AdminUserListView.as_view(), name='admin_user_list'),
     path('dashboard-summary/', DashboardSummaryView.as_view(), name='dashboard_summary'),
+    # ✅ हे नवीन ॲड करा: यामुळे क्लायंट लिस्टमध्ये मार्क्स दिसतील
+        path('admin/all-clients/', AdminClientInfoListView.as_view(), name='admin_all_clients'),
+
+       path('user-settings/', UserSettingView.as_view(), name='user-settings'),
 ]
 
 # ✅ MEDIA FILES (profile images)

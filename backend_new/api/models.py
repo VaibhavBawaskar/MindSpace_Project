@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+import uuid # फाईलच्या सर्वात वरती ॲड करा
 # --------------------------
 # Custom User Model
 # --------------------------
@@ -24,16 +24,37 @@ class Counsellor(models.Model):
         ('Medium', 'Medium'),
         ('Low', 'Low'),
     ]
-    counsellor_id = models.CharField(max_length=10, unique=True)
+
+    # १. युजरसोबत संबंध (लॉगिनसाठी अत्यंत आवश्यक)
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name="counsellor_profile",
+        null=True, blank=True
+    )
+
+    # २. युनिक आयडी (हा आपण आपोआप तयार करू)
+    counsellor_id = models.CharField(max_length=20, unique=True, editable=False)
+
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     specialization = models.CharField(max_length=255)
     total_sessions = models.IntegerField(default=0)
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='Medium')
 
-    def __str__(self):
-        return self.name
+    # ३. काही अतिरिक्त उपयुक्त फील्ड्स
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        # जर counsellor_id नसेल, तर तो आपोआप तयार होईल (उदा: CNSL-A1B2)
+        if not self.counsellor_id:
+            self.counsellor_id = f"CNSL-{str(uuid.uuid4())[:4].upper()}"
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.name} ({self.specialization})"
 
 # --------------------------
 # Depression Scanning Model
@@ -138,3 +159,15 @@ class Note(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class UserSetting(models.Model):
+    # Counsellor sobat link kela mhanje data manage karne sope jaate
+    counsellor = models.OneToOneField('Counsellor', on_delete=models.CASCADE, related_name='settings')
+    language = models.CharField(max_length=50, default="English")
+    theme = models.CharField(max_length=20, default="Light")
+    timezone = models.CharField(max_length=100, default="IST (UTC+5:30)")
+    date_format = models.CharField(max_length=50, default="DD/MM/YYYY")
+
+    def __str__(self):
+        return f"Settings for {self.counsellor.name}"
